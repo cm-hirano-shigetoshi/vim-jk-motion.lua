@@ -1,6 +1,7 @@
 local M = {}
 
 local ns_id = vim.api.nvim_create_namespace("right_line_numbers")
+
 local alphas = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "q", "r", "s", "t", "u", "v", "w",
     "x", "y", "z", ";a", ";b", ";c", ";d", ";e", ";f", ";g", ";h", ";i", ";j", ";k", ";l", ";m", ";n", ";q", ";r", ";s",
     ";t", ";u", ";v", ";w", ";x", ";y", ";z" }
@@ -62,7 +63,7 @@ function M.show_target()
     vim.opt.foldcolumn = '1'
     local augroup = vim.api.nvim_create_augroup("RightLineNumbers", { clear = true })
 
-    vim.api.nvim_create_autocmd({ "WinScrolled", "VimResized", "WinEnter", "BufEnter", "TextChanged" }, {
+    vim.api.nvim_create_autocmd({ "WinScrolled", "VimResized", "WinEnter", "BufEnter", "TextChanged", "InsertEnter", "InsertLeave" }, {
         group = augroup,
         callback = function()
             local bufnr = vim.api.nvim_get_current_buf()
