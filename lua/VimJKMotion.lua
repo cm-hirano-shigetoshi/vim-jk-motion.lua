@@ -42,6 +42,25 @@ M.motion = function()
     end
 end
 
+M.motion_visual = function()
+    local start_pos = vim.fn.getpos("'<")
+    vim.cmd("normal \27") -- ESCを送信
+    local c = vim.fn.nr2char(vim.fn.getchar())
+    if c == ";" then
+        c = c .. vim.fn.nr2char(vim.fn.getchar())
+    end
+    local index = findIndex(alphas, c)
+    if index then
+        local first_line = vim.fn.line('w0') - 1
+        local target = first_line + index
+        vim.cmd("normal " .. target .. "G")
+
+        vim.fn.setpos("'<", start_pos)
+        vim.fn.setpos("'>", vim.fn.getpos('.'))
+        vim.cmd("normal gv")
+    end
+end
+
 local function set_right_line_numbers(bufnr)
     local first_line = vim.fn.line('w0') - 1 -- 0-indexed
     local last_line = vim.fn.line('w$') - 1  -- 0-indexed
@@ -63,13 +82,14 @@ function M.show_target()
     vim.opt.foldcolumn = '1'
     local augroup = vim.api.nvim_create_augroup("RightLineNumbers", { clear = true })
 
-    vim.api.nvim_create_autocmd({ "WinScrolled", "VimResized", "WinEnter", "BufEnter", "TextChanged", "InsertEnter", "InsertLeave" }, {
-        group = augroup,
-        callback = function()
-            local bufnr = vim.api.nvim_get_current_buf()
-            set_right_line_numbers(bufnr)
-        end,
-    })
+    vim.api.nvim_create_autocmd(
+        { "WinScrolled", "VimResized", "WinEnter", "BufEnter", "TextChanged", "InsertEnter", "InsertLeave" }, {
+            group = augroup,
+            callback = function()
+                local bufnr = vim.api.nvim_get_current_buf()
+                set_right_line_numbers(bufnr)
+            end,
+        })
 end
 
 return M
