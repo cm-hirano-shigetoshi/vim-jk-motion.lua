@@ -3,8 +3,8 @@ local M = {}
 local ns_id = vim.api.nvim_create_namespace("right_line_numbers")
 
 local alphas = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "q", "r", "s", "t", "u", "v", "w",
-    "x", "y", "z", ";a", ";b", ";c", ";d", ";e", ";f", ";g", ";h", ";i", ";j", ";k", ";l", ";m", ";n", ";q", ";r", ";s",
-    ";t", ";u", ";v", ";w", ";x", ";y", ";z" }
+    "x", "y", "z", "_a", "_b", "_c", "_d", "_e", "_f", "_g", "_h", "_i", "_j", "_k", "_l", "_m", "_n", "_q", "_r", "_s",
+    "_t", "_u", "_v", "_w", "_x", "_y", "_z" }
 vim.api.nvim_command('highlight PrimaryColor guifg=darkgray')
 vim.api.nvim_command('highlight SecondaryColor guifg=gray')
 local color_schemas = { "PrimaryColor", "SecondaryColor" }
@@ -31,7 +31,7 @@ end
 
 M.motion = function()
     local c = vim.fn.nr2char(vim.fn.getchar())
-    if c == ";" then
+    if c == "_" then
         c = c .. vim.fn.nr2char(vim.fn.getchar())
     end
     local index = findIndex(alphas, c)
@@ -46,7 +46,7 @@ M.motion_visual = function()
     local start_pos = vim.fn.getpos("'<")
     vim.cmd("normal \27") -- ESCを送信
     local c = vim.fn.nr2char(vim.fn.getchar())
-    if c == ";" then
+    if c == "_" then
         c = c .. vim.fn.nr2char(vim.fn.getchar())
     end
     local index = findIndex(alphas, c)
